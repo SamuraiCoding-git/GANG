@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="gang icon.png" type="image/png">
+  <title>GANG</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.cdnfonts.com/css/pricedown" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/diploma" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            graphite: "#f7efd6",
+            slate: "#b8b08f",
+            rosso: "#86b24f",
+            cloud: "#13100d",
+            line: "#33271b",
+            panel: "#18120f",
+            steel: "#221814",
+            mist: "#e8ddbe",
+            sand: "#c5a36a",
+            ink: "#070605",
+          },
+          fontFamily: {
+            sans: ["Barlow Condensed", "system-ui", "sans-serif"],
+            display: ["Bebas Neue", "system-ui", "sans-serif"],
+            pricedown: ["Pricedown", "Bebas Neue", "system-ui", "sans-serif"],
+            diploma: ["Diploma", "Bebas Neue", "system-ui", "sans-serif"],
+            mono: ["JetBrains Mono", "SFMono-Regular", "ui-monospace", "monospace"],
+          },
+          letterSpacing: {
+            tighter2: "-0.04em",
+          },
+          boxShadow: {
+            speed: "0 18px 40px rgba(134, 178, 79, 0.2)",
+            panel: "0 24px 90px rgba(0, 0, 0, 0.42)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --gta-green: #86b24f;
+      --gta-gold: #d8a73c;
+      --gta-orange: #f4b24f;
+      --gta-red: #b53a28;
+      --gta-armor: #dfe9f0;
+      --gta-cream: #f7efd6;
+      --gta-brown: #2a1d14;
+      --gta-shadow: rgba(0, 0, 0, 0.42);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(255, 198, 96, 0.26), rgba(255, 198, 96, 0) 28%),
+        radial-gradient(circle at top left, rgba(134, 178, 79, 0.22), rgba(134, 178, 79, 0) 24%),
+        radial-gradient(circle at top right, rgba(197, 163, 106, 0.16), rgba(197, 163, 106, 0) 20%),
+        linear-gradient(180deg, #0a0705 0%, #120c09 28%, #1b130d 58%, #22160f 100%);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 11%, transparent 11% 22%, rgba(255, 255, 255, 0.03) 22% 26%, transparent 26% 100%),
+        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.24));
+      mix-blend-mode: screen;
+      opacity: 0.36;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(rgba(255, 255, 255, 0.08) 0.7px, transparent 0.8px),
+        linear-gradient(rgba(0, 0, 0, 0.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.13) 1px, transparent 1px);
+      background-size: 3px 3px, 120px 120px, 120px 120px;
+      opacity: 0.16;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .screen-fx {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.28;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.18));
+      background-size: 100% 4px, 100% 100%;
+      mix-blend-mode: soft-light;
+    }
+
+    .fade-section {
+      opacity: 0;
+      transform: translateY(18px);
+      will-change: opacity, transform;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(197, 163, 106, 0.2);
+      background:
+        linear-gradient(180deg, rgba(255, 245, 220, 0.08), rgba(255, 245, 220, 0.015)),
+        linear-gradient(135deg, rgba(134, 178, 79, 0.1), transparent 38%),
+        linear-gradient(180deg, rgba(53, 35, 21, 0.45), rgba(19, 14, 11, 0)),
+        rgba(24, 18, 15, 0.94);
+      box-shadow:
+        0 24px 90px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 242, 214, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 10%, transparent 10% 30%, rgba(255, 255, 255, 0.02) 30% 34%, transparent 34% 100%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 10px;
+      background: linear-gradient(90deg, rgba(134, 178, 79, 0.85), rgba(197, 163, 106, 0.9));
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .noise::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.13;
+      background-image:
+        radial-gradient(rgba(255, 240, 210, 0.09) 0.7px, transparent 0.9px),
+        linear-gradient(rgba(255, 240, 210, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 240, 210, 0.04) 1px, transparent 1px);
+      background-size: 3px 3px, 84px 84px, 84px 84px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 92%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      font-family: "Barlow Condensed", "Bebas Neue", system-ui, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #f0ddb0;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .eyebrow::before {
+      content: none;
+    }
+
+    .hero-grid {
+      background:
+        radial-gradient(circle at left top, rgba(134, 178, 79, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 0, rgba(255, 198, 96, 0.12), transparent 32%),
+        linear-gradient(180deg, rgba(255, 239, 214, 0.05), rgba(255, 239, 214, 0));
+    }
+
+    .metric-card {
+      border: 1px solid rgba(197, 163, 106, 0.16);
+      background:
+        linear-gradient(180deg, rgba(255, 240, 210, 0.055), rgba(255, 240, 210, 0.012)),
+        rgba(12, 9, 8, 0.36);
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 239, 214, 0.06),
+        inset 0 0 0 3px rgba(0, 0, 0, 0.16);
+    }
+
+    .metric-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(134, 178, 79, 0.95), rgba(244, 178, 79, 0.4));
+      opacity: 0.9;
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 0.55rem;
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 1.15rem;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+      color: #f7efd6;
+    }
+
+    .pitlane-easter {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      pointer-events: none;
+    }
+
+    .pitlane-card {
+      width: min(280px, calc(100vw - 36px));
+      padding: 0.8rem;
+      border: 1px solid rgba(197, 163, 106, 0.18);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 242, 215, 0.06), rgba(255, 242, 215, 0.018)),
+        rgba(20, 14, 10, 0.94);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      pointer-events: none;
+    }
+
+    .pitlane-thumb {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .pitlane-thumb img {
+      width: 100%;
+      display: block;
+      filter: saturate(1.02) contrast(1.04);
+    }
+
+    .pitlane-label {
+      margin-top: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c9bb98;
+    }
+
+    .pitlane-title {
+      margin-top: 0.45rem;
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.25;
+      color: #fff4d4;
+    }
+
+    .pitlane-trigger {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(197, 163, 106, 0.18);
+      border-radius: 6px;
+      background: rgba(18, 13, 10, 0.96);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #f0e2ba;
+      text-decoration: none;
+      pointer-events: auto;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .pitlane-trigger-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      object-fit: contain;
+      display: block;
+      filter: grayscale(1) contrast(1.15);
+    }
+
+    .pitlane-trigger:hover {
+      transform: translate(2px, 2px);
+      border-color: rgba(134, 178, 79, 0.35);
+      background: rgba(24, 18, 15, 0.98);
+      box-shadow: none;
+    }
+
+    .pitlane-easter:hover .pitlane-card,
+    .pitlane-easter:focus-within .pitlane-card {
+      opacity: 1;
+      transform: translateY(-62px) scale(1);
+      pointer-events: auto;
+    }
+
+    @media (max-width: 639px) {
+      .pitlane-trigger span:last-child {
+        display: none;
+      }
+    }
+
+    .card-surface {
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+      position: relative;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 239, 214, 0.04),
+        inset 0 0 0 3px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-surface:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(134, 178, 79, 0.34);
+      background: linear-gradient(180deg, rgba(255, 239, 214, 0.08), rgba(255, 239, 214, 0.025));
+      box-shadow:
+        0 20px 44px rgba(0, 0, 0, 0.28),
+        inset 0 0 0 1px rgba(255, 239, 214, 0.08),
+        inset 0 0 0 3px rgba(0, 0, 0, 0.16);
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, #8dc454, #6b9b35);
+      border: 4px solid #000;
+      border-radius: 6px;
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+      color: #130d08 !important;
+      text-shadow: none;
+      transform: translate(0, 0);
+    }
+
+    .cta-button:hover {
+      background: linear-gradient(135deg, #9fce64, #77a741);
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .section-divider {
+      border-top: 1px solid rgba(197, 163, 106, 0.14);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .fade-section {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    h1 {
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-family: "Pricedown", "Bebas Neue", system-ui, sans-serif;
+      font-weight: 400;
+      line-height: 0.9;
+      text-shadow:
+        -2px 0 #000,
+        2px 0 #000,
+        0 -2px #000,
+        0 2px #000,
+        0 10px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    h2 {
+      text-align: center;
+      text-transform: uppercase;
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-shadow:
+        -1px 0 #000,
+        1px 0 #000,
+        0 -1px #000,
+        0 1px #000,
+        0 8px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    h3 {
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      line-height: 1.1;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-art {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(100%, 28rem);
+      margin: 0 auto 1.75rem;
+      padding: 1rem;
+      border: 3px solid rgba(0, 0, 0, 0.85);
+      border-radius: 2rem;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 242, 232, 0.98));
+      box-shadow:
+        0 18px 0 rgba(0, 0, 0, 0.22),
+        inset 0 0 0 6px rgba(216, 167, 60, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-art img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: grayscale(1) contrast(1.18) brightness(1.04);
+    }
+
+    .video-frame {
+      box-shadow:
+        inset 0 0 0 2px rgba(197, 163, 106, 0.12),
+        0 24px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    .gta-card {
+      box-shadow: inset 0 1px 0 rgba(255, 248, 226, 0.06);
+    }
+
+    .gta-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 1.15rem 1rem auto;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-right: 2px solid rgba(197, 163, 106, 0.18);
+      border-bottom: 2px solid rgba(197, 163, 106, 0.18);
+      pointer-events: none;
+    }
+
+    .join-box {
+      background:
+        linear-gradient(180deg, rgba(255, 242, 214, 0.08), rgba(255, 242, 214, 0.02)),
+        rgba(19, 14, 11, 0.78);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 239, 214, 0.05),
+        inset 0 0 0 4px rgba(0, 0, 0, 0.18);
+    }
+
+    .offer-card {
+      position: relative;
+      overflow: hidden;
+      gap: 1rem;
+      border-radius: 30px;
+      border: 2px solid rgba(93, 72, 48, 0.9);
+      background:
+        linear-gradient(180deg, rgba(72, 56, 41, 0.24), rgba(24, 18, 14, 0.08)),
+        linear-gradient(180deg, rgba(33, 25, 20, 0.95), rgba(22, 17, 13, 0.96));
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 235, 196, 0.04),
+        inset 0 0 0 8px rgba(0, 0, 0, 0.08),
+        0 24px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    .offer-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 236, 200, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 236, 200, 0.025) 1px, transparent 1px);
+      background-size: 100% 5px, 80px 80px;
+      opacity: 0.28;
+      pointer-events: none;
+    }
+
+    .offer-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .offer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .offer-hud {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .offer-fist {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .offer-fist img {
+      display: block;
+      width: 100%;
+      max-width: 17rem;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .offer-side {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .offer-timer {
+      justify-self: start;
+      padding: 0.4rem 0.75rem;
+      border: 3px solid #000;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f3f3ef, #d8d9d5);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.42);
+      font-family: "Pricedown", "Bebas Neue", system-ui, sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 0.85;
+      letter-spacing: 0.04em;
+      color: #dedede;
+      text-shadow:
+        -2px 0 #000,
+        2px 0 #000,
+        0 -2px #000,
+        0 2px #000;
+    }
+
+    .offer-mini-bar {
+      width: min(100%, 16rem);
+      height: 1.2rem;
+      padding: 0.18rem;
+      border: 3px solid #000;
+      background: rgba(53, 44, 38, 0.95);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.36);
+    }
+
+    .offer-mini-fill {
+      width: 36%;
+      height: 100%;
+      background: linear-gradient(90deg, #ffffff, #d7d6da);
+    }
+
+    .offer-health {
+      width: 100%;
+      height: 1.45rem;
+      padding: 0.16rem;
+      border: 4px solid #000;
+      background: rgba(48, 26, 22, 0.95);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+    }
+
+    .offer-health-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #f44336, #c41414);
+    }
+
+    .offer-copy {
+      max-width: 28rem;
+      margin: 0 auto;
+      font-family: "Barlow Condensed", system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #cabf9f;
+      text-align: center;
+    }
+
+    .offer-copy strong {
+      color: #f1e7c4;
+      font-weight: 700;
+    }
+
+    .offer-note {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #c7bb97;
+      text-align: center;
+    }
+
+    .easter-card-note {
+      margin-top: 0.75rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(197, 163, 106, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .easter-card-note strong {
+      display: block;
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      color: #fff4d4;
+    }
+
+    .easter-card-note span {
+      display: block;
+      margin-top: 0.2rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #c9bb98;
+    }
+
+    .hero-stack {
+      max-width: 74rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-metrics {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-heading {
+      position: relative;
+    }
+
+    .section-heading::after {
+      content: "SAN ANDREAS ENERGY";
+      display: block;
+      margin-top: 0.85rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-align: center;
+      color: rgba(201, 187, 152, 0.48);
+    }
+
+    .hud-bars {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .hud-bar {
+      width: min(100%, 240px);
+    }
+
+    .hud-bar-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.3rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #f0ddb0;
+    }
+
+    .hud-bar-track {
+      height: 16px;
+      padding: 2px;
+      border: 2px solid #000;
+      background: rgba(0, 0, 0, 0.7);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.32);
+    }
+
+    .hud-bar-fill {
+      height: 100%;
+      width: var(--fill, 100%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent), var(--bar-color, var(--gta-green));
+    }
+
+    .wanted-level {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.75rem;
+      border: 2px solid rgba(0, 0, 0, 0.82);
+      background: rgba(24, 18, 15, 0.82);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .wanted-star {
+      color: rgba(255, 226, 148, 0.35);
+      font-size: 1rem;
+      transition: color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .wanted-star.is-on {
+      color: #ffd75b;
+      text-shadow: 0 0 12px rgba(255, 210, 91, 0.35);
+    }
+
+    .cta-wrap:hover .wanted-star.is-on {
+      animation: flash-star 0.6s steps(2) infinite;
+    }
+
+    .money-strip {
+      width: min(100%, 34rem);
+      margin: 0 auto;
+      padding: 0.35rem 0.45rem;
+      border: 0;
+      border-radius: 0;
+      background:
+        transparent;
+      box-shadow: none;
+    }
+
+    .money-strip img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    .offer-stars {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+      flex-wrap: nowrap;
+    }
+
+    .offer-stars .wanted-star {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      line-height: 1;
+      color: #ffd11a;
+      text-shadow:
+        -2px 0 #000,
+        2px 0 #000,
+        0 -2px #000,
+        0 2px #000;
+    }
+
+    .audio-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.72rem 0.95rem;
+      border: 3px solid #000;
+      background: rgba(247, 239, 214, 0.92);
+      color: #130d08;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.9);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .audio-toggle:hover {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+      background: rgba(255, 245, 220, 1);
+    }
+
+    .audio-toggle.is-active {
+      background: rgba(141, 196, 84, 0.96);
+    }
+
+    .audio-toggle-icon {
+      position: relative;
+      width: 1.4rem;
+      height: 1.1rem;
+      flex: 0 0 auto;
+    }
+
+    .audio-toggle-icon::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0.62rem;
+      height: 0.62rem;
+      background: #130d08;
+      clip-path: polygon(0 28%, 38% 28%, 72% 0, 72% 100%, 38% 72%, 0 72%);
+      transform: translateY(-50%);
+    }
+
+    .audio-toggle-icon::after {
+      content: "";
+      position: absolute;
+      left: 0.72rem;
+      top: 50%;
+      width: 0.48rem;
+      height: 0.48rem;
+      border-top: 3px solid #130d08;
+      border-right: 3px solid #130d08;
+      border-radius: 0 100% 0 0;
+      transform: translateY(-50%) rotate(45deg);
+      opacity: 0.38;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .audio-toggle.is-active .audio-toggle-icon::after {
+      opacity: 1;
+      transform: translateY(-50%) rotate(45deg) scale(1.08);
+    }
+
+    .map-overlay {
+      position: absolute;
+      inset: 0;
+      opacity: 0.16;
+      background:
+        radial-gradient(circle at 18% 32%, rgba(216, 167, 60, 0.9) 0 4px, transparent 4px),
+        radial-gradient(circle at 68% 38%, rgba(134, 178, 79, 1) 0 4px, transparent 4px),
+        radial-gradient(circle at 46% 72%, rgba(244, 178, 79, 0.95) 0 4px, transparent 4px),
+        linear-gradient(135deg, transparent 0 15%, rgba(247, 239, 214, 0.18) 15% 16%, transparent 16% 100%),
+        linear-gradient(35deg, transparent 0 28%, rgba(247, 239, 214, 0.12) 28% 29%, transparent 29% 100%),
+        radial-gradient(circle at 22% 30%, rgba(247, 239, 214, 0.18) 0 10%, transparent 10% 100%),
+        radial-gradient(circle at 72% 36%, rgba(247, 239, 214, 0.12) 0 12%, transparent 12% 100%),
+        linear-gradient(90deg, rgba(247, 239, 214, 0.1) 1px, transparent 1px),
+        linear-gradient(rgba(247, 239, 214, 0.1) 1px, transparent 1px);
+      background-size: auto, auto, auto, auto, auto, auto, auto, 48px 48px, 48px 48px;
+      pointer-events: none;
+      mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.95), transparent 92%);
+    }
+
+    .map-overlay::before {
+      content: "SAN ANDREAS MAP";
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      color: rgba(247, 239, 214, 0.45);
+    }
+
+    .map-overlay::after {
+      content: "LOS SANTOS";
+      position: absolute;
+      left: 16%;
+      top: 27%;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: rgba(247, 239, 214, 0.52);
+    }
+
+    .scanline {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scanline::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 60, 0.02), transparent 52%, rgba(0, 140, 255, 0.02));
+      background-size: 100% 4px, 100% 100%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.3;
+    }
+
+    @keyframes flash-star {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.35;
+        transform: scale(0.92);
+      }
+    }
+
+    .video-frame,
+    .join-box,
+    .metric-card,
+    .gta-card {
+      backdrop-filter: blur(8px);
+    }
+
+    .video-frame {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(255, 239, 214, 0.05);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    @media (max-width: 639px) {
+      .hero-art {
+        width: min(100%, 22rem);
+        padding: 0.8rem;
+      }
+
+      .section-heading::after {
+        letter-spacing: 0.22em;
+      }
+
+      .audio-toggle-label {
+        display: none;
+      }
+
+      .offer-card {
+        gap: 0.9rem;
+      }
+
+      .offer-meta {
+        justify-content: center;
+      }
+
+      .offer-hud {
+        justify-content: center;
+      }
+
+      .offer-side {
+        justify-items: center;
+      }
+
+      .offer-timer {
+        justify-self: center;
+      }
+
+      .offer-note {
+        letter-spacing: 0.2em;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .offer-card {
+        position: fixed;
+        top: 1.75rem;
+        right: 1.75rem;
+        width: min(34rem, calc(100vw - 3.5rem));
+        z-index: 35;
+      }
+
+      #join {
+        padding-top: 32rem;
+      }
+    }
+
+  </style>
+</head>
+<body class="font-sans text-graphite antialiased">
+  <div class="screen-fx" aria-hidden="true"></div>
+  <button class="audio-toggle" type="button" aria-pressed="false" aria-label="Включить звук интерфейса">
+    <span class="audio-toggle-icon" aria-hidden="true"></span>
+    <span class="audio-toggle-label">Audio Off</span>
+  </button>
+  <div class="mx-auto max-w-[1440px] px-4 py-4 sm:px-8 sm:py-6 lg:px-10 lg:py-8">
+    <main>
+      <section class="panel noise hero-grid fade-section rounded-[34px] px-5 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div class="hero-stack space-y-8 sm:space-y-9">
+          <div class="space-y-5 sm:space-y-6">
+            <div class="hud-bars">
+              <div class="hud-bar">
+                <div class="hud-bar-label"><span>HP</span><span>100</span></div>
+                <div class="hud-bar-track">
+                  <div class="hud-bar-fill" style="--fill: 100%; --bar-color: var(--gta-red);"></div>
+                </div>
+              </div>
+              <div class="hud-bar">
+                <div class="hud-bar-label"><span>Armor</span><span>85</span></div>
+                <div class="hud-bar-track">
+                  <div class="hud-bar-fill" style="--fill: 85%; --bar-color: var(--gta-armor);"></div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-art">
+              <img src="gang icon.png" alt="GANG icon">
+            </div>
+            <div class="eyebrow">Комьюнити для выхода на зарубежный рынок</div>
+            <h1 class="font-display max-w-5xl text-5xl font-bold leading-[0.94] tracking-tighter2 sm:text-7xl lg:text-[5.5rem]">
+              Добро пожаловать в <span class="text-rosso">GANG</span>
+            </h1>
+            <p class="max-w-2xl text-lg leading-8 text-slate text-center sm:text-xl">
+              Комьюнити единомышленников, в котором ты поймешь, что нужно делать, чтобы выйти на
+              <span class="font-mono text-graphite text-rosso">$10,000</span>
+              с зарубежного рынка.
+            </p>
+          </div>
+          <div class="cta-wrap hero-actions flex flex-col gap-4 sm:flex-row sm:items-center">
+            <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="cta-button inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white transition duration-300">
+              Присоединиться за $15 навсегда
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m13 5 7 7-7 7"></path>
+              </svg>
+            </a>
+            <div class="space-y-2">
+              <div class="wanted-level" aria-label="Wanted level">
+                <span class="wanted-star is-on">★</span>
+                <span class="wanted-star is-on">★</span>
+                <span class="wanted-star is-on">★</span>
+                <span class="wanted-star is-on">★</span>
+                <span class="wanted-star is-on">★</span>
+                <span class="wanted-star is-on">★</span>
+              </div>
+              <div class="font-mono text-center text-xs uppercase tracking-[0.18em] text-slate">Навсегда. Один платёж. Без подписки.</div>
+            </div>
+          </div>
+          <div class="hero-metrics grid gap-4 pt-2 sm:grid-cols-3 lg:max-w-5xl">
+            <div class="metric-card rounded-[24px] px-5 py-5">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate">Фокус</span>
+              <strong>$10,000/мес на зарубежке</strong>
+            </div>
+            <div class="metric-card rounded-[24px] px-5 py-5">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate">Формат</span>
+              <strong>Материалы, разборы и среда роста</strong>
+            </div>
+            <div class="metric-card rounded-[24px] px-5 py-5">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate">Старт</span>
+              <strong>$15 навсегда</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel scanline fade-section mt-4 rounded-[34px] px-5 py-10 sm:mt-5 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div class="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div class="section-heading space-y-4">
+            <div class="eyebrow">Mission Brief</div>
+            <h2 class="font-display text-4xl font-bold leading-tight tracking-tighter2 sm:text-6xl">
+              Посмотри видео о <span class="text-rosso">GANG</span>
+            </h2>
+          </div>
+        </div>
+        <div class="space-y-6 sm:space-y-8">
+          <div class="video-frame scanline aspect-video overflow-hidden rounded-[28px] border border-line bg-cloud shadow-panel">
+            <iframe
+              class="h-full w-full"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0"
+              title="Видео о GANG"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="section-divider flex flex-col gap-5 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="cta-button inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white transition duration-300">
+              Присоединиться за $15 навсегда
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m13 5 7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel fade-section mt-4 rounded-[34px] px-5 py-10 sm:mt-5 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div class="map-overlay" aria-hidden="true"></div>
+        <div class="section-heading mb-10 max-w-4xl space-y-4 sm:mb-12">
+          <div class="eyebrow">Gear Up</div>
+          <h2 class="font-display text-4xl font-bold tracking-tighter2 sm:text-6xl">Что ты <span class="text-rosso">найдёшь</span> внутри</h2>
+          <p class="text-lg leading-8 text-center text-slate">
+            Полный набор материалов и знаний, чтобы ты понял как выйти на
+            <span class="font-mono text-graphite text-rosso">$10,000/мес</span>
+            на зарубежном рынке.
+          </p>
+        </div>
+
+        <div class="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <i data-lucide="clapperboard" class="h-8 w-8 text-rosso"></i>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">Система на $15.000</h3>
+              <p class="leading-7 text-slate">Как выстроить фул систему инфобизнеса на 15,000$/мес.</p>
+            </div>
+          </article>
+
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <i data-lucide="users" class="h-8 w-8 text-rosso"></i>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">Коммьюнити заряженных предпринимателей</h3>
+              <p class="leading-7 text-slate">Общение с единомышленниками, а не незнакомцами из интернета.</p>
+            </div>
+          </article>
+
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <i data-lucide="target" class="h-8 w-8 text-rosso"></i>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">Стратегия на жизнь</h3>
+              <p class="leading-7 text-slate">Гайд, который навсегда изменит твою жизнь и поможет составить глобальную стратегию и на ближайшие 3 года.</p>
+            </div>
+          </article>
+
+
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <i data-lucide="chart-column" class="h-8 w-8 text-rosso"></i>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">Разборы воронок</h3>
+              <p class="leading-7 text-slate">Анализ воронок на зарубежном рынке и как строить такие же.</p>
+            </div>
+          </article>
+
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <i data-lucide="book-open" class="h-8 w-8 text-rosso"></i>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">Материалы по продуктам</h3>
+              <p class="leading-7 text-slate">Полные гайды по созданию продуктов и офферов.</p>
+            </div>
+          </article>
+
+          <article class="card-surface gta-card scanline flex h-full flex-col gap-8 rounded-[28px] border border-line bg-cloud p-8">
+            <div class="inline-flex h-12 w-12 items-center justify-center">
+              <svg viewBox="0 0 24 24" class="h-8 w-8 text-rosso" fill="currentColor" aria-hidden="true">
+                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.7V8.3l6.4 3.7-6.4 3.7Z"/>
+              </svg>
+            </div>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold tracking-tighter2">YouTube гайды</h3>
+              <p class="leading-7 text-slate">Материалы по снятию видео на YouTube, чтобы лутать клиентов на свои услуги и подписчиков с нуля.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel fade-section mt-4 rounded-[34px] px-5 py-10 sm:mt-5 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div class="section-heading mb-10 max-w-4xl space-y-4 sm:mb-12">
+          <div class="eyebrow">Street Logic</div>
+          <h2 class="font-display text-4xl font-bold tracking-tighter2 sm:text-6xl">
+            Почему <span class="text-rosso">GANG</span>  работает
+          </h2>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="card-surface gta-card scanline flex items-start gap-4 rounded-[26px] border border-line bg-cloud p-6 sm:gap-6">
+            <i data-lucide="move-right" class="mt-1 h-5 w-5 shrink-0 text-rosso"></i>
+            <p class="max-w-4xl text-lg leading-8 text-graphite">
+              Цель <span class="font-mono text-rosso">GANG</span> дать тебе коммьюнити из заряженных единомышленников-предпринимателей, которые покоряют зарубежный рынок.
+            </p>
+          </div>
+          <div class="card-surface gta-card scanline flex items-start gap-4 rounded-[26px] border border-line bg-cloud p-6 sm:gap-6">
+            <i data-lucide="move-right" class="mt-1 h-5 w-5 shrink-0 text-rosso"></i>
+            <p class="max-w-4xl text-lg leading-8 text-graphite">
+              После вступления ты поймешь, что нужно делать, чтобы выйти на
+              <span class="font-mono text-rosso">$10,000</span>
+              с зарубежного рынка.
+            </p>
+          </div>
+          <div class="card-surface gta-card scanline flex items-start gap-4 rounded-[26px] border border-line bg-cloud p-6 sm:gap-6">
+            <i data-lucide="move-right" class="mt-1 h-5 w-5 shrink-0 text-rosso"></i>
+            <p class="max-w-4xl text-lg leading-8 text-graphite">Материалы постоянно дополняются и обновляются.</p>
+          </div>
+          <div class="card-surface gta-card scanline flex items-start gap-4 rounded-[26px] border border-line bg-cloud p-6 sm:gap-6">
+            <i data-lucide="move-right" class="mt-1 h-5 w-5 shrink-0 text-rosso"></i>
+            <p class="max-w-4xl text-lg leading-8 text-graphite">
+              Ты будешь реализовывать стратегию, потому что хочешь, а не потому что
+              <span class="font-mono text-rosso">надо</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="join" class="panel noise fade-section mt-4 rounded-[34px] px-5 py-10 sm:mt-5 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div class="space-y-5 sm:space-y-6">
+            <div class="eyebrow">Final Mission</div>
+            <h2 class="font-display max-w-4xl text-4xl font-bold tracking-tighter2 sm:text-6xl">Готов <span class="text-rosso">начать</span> свой путь?</h2>
+            <p class="max-w-2xl text-lg leading-8 text-slate text-center">
+              Если ты реально готов выйти на
+              <span class="font-mono text-graphite text-rosso">$10,000/мес</span>
+              на американском рынке, то ждем тебя в <span class="text-rosso font-bold">GANG.</span> Здесь начнется твоя дорога.
+            </p>
+          </div>
+          <div class="join-box offer-card scanline space-y-5 rounded-[28px] border border-line p-6 sm:space-y-6 sm:p-8 lg:ml-auto lg:max-w-md">
+            <div class="offer-hud">
+              <div class="offer-fist">
+                <img src="dashboard.png" alt="GTA San Andreas style fist">
+              </div>
+            </div>
+            <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="cta-button inline-flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white transition duration-300">
+              RESPECT + $15
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m13 5 7 7-7 7"></path>
+              </svg>
+            </a>
+            <p class="offer-copy"><strong>Один платёж.</strong> Бессрочный доступ, новые материалы по мере обновления базы и вход в GANG без ежемесячной подписки.</p>
+            <p class="offer-note">
+              Платеж обрабатывается безопасно через <span class="text-graphite text-rosso">Lava</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="pitlane-easter" aria-label="Пасхалка GANG">
+    <div class="pitlane-card">
+      <div class="pitlane-thumb">
+        <div class="hero-art w-full rounded-[20px] p-3">
+          <img src="fist.png" alt="GANG fist easter egg">
+        </div>
+      </div>
+      <div class="easter-card-note">
+        <strong>GANG MODE</strong>
+        <span>Hidden drop unlocked</span>
+      </div>
+    </div>
+    <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="pitlane-trigger">
+      <img src="fist.png" alt="" class="pitlane-trigger-icon" aria-hidden="true">
+      <span>Gang only</span>
+    </a>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    const initLanding = () => {
+      if (!document.body) return;
+
+      if (window.lucide?.createIcons) {
+        window.lucide.createIcons({
+          attrs: {
+            width: 28,
+            height: 28,
+            stroke: "currentColor",
+            "stroke-width": 1.5,
+          },
+        });
+      }
+
+      const fadeSections = document.querySelectorAll(".fade-section");
+      const audioToggle = document.querySelector(".audio-toggle");
+      const interactiveCards = document.querySelectorAll(".card-surface, .cta-button, .pitlane-trigger");
+      let audioEnabled = false;
+      let audioContext;
+
+      const getAudioContext = () => {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        return audioContext;
+      };
+
+      const playTone = (freq, duration, type = "square", gainValue = 0.02, when = 0) => {
+        if (!audioEnabled) return;
+
+        const ctx = getAudioContext();
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(freq, ctx.currentTime + when);
+        gain.gain.setValueAtTime(gainValue, ctx.currentTime + when);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + when + duration);
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        oscillator.start(ctx.currentTime + when);
+        oscillator.stop(ctx.currentTime + when + duration);
+      };
+
+      const playHoverSound = () => {
+        playTone(480, 0.06, "square", 0.015);
+        playTone(620, 0.08, "triangle", 0.01, 0.02);
+      };
+
+      const playMissionPassedSound = () => {
+        playTone(523.25, 0.15, "triangle", 0.025);
+        playTone(659.25, 0.16, "triangle", 0.022, 0.08);
+        playTone(783.99, 0.24, "triangle", 0.02, 0.16);
+      };
+
+      audioToggle?.addEventListener("click", async () => {
+        audioEnabled = !audioEnabled;
+        audioToggle.classList.toggle("is-active", audioEnabled);
+        audioToggle.setAttribute("aria-pressed", String(audioEnabled));
+
+        const toggleLabel = audioToggle.querySelector(".audio-toggle-label");
+        if (toggleLabel) {
+          toggleLabel.textContent = audioEnabled ? "Audio On" : "Audio Off";
+        }
+
+        if (audioEnabled) {
+          const ctx = getAudioContext();
+          if (ctx.state === "suspended") {
+            await ctx.resume();
+          }
+          playHoverSound();
+        }
+      });
+
+      interactiveCards.forEach((element) => {
+        element.addEventListener("mouseenter", playHoverSound);
+      });
+
+      document.querySelectorAll(".cta-button").forEach((button) => {
+        button.addEventListener("click", playMissionPassedSound);
+      });
+
+      const revealSection = (section) => {
+        section.classList.add("is-visible");
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              revealSection(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.08,
+          rootMargin: "0px 0px -10% 0px",
+        }
+      );
+
+      fadeSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const isInitiallyVisible = rect.top < window.innerHeight * 0.92;
+
+        if (isInitiallyVisible) {
+          revealSection(section);
+          return;
+        }
+
+        observer.observe(section);
+      });
+    };
+
+    if (document.readyState === "loading" || !document.body) {
+      window.addEventListener("DOMContentLoaded", initLanding, { once: true });
+    } else {
+      initLanding();
+    }
+  </script>
+</body>
+</html>
