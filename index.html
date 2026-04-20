@@ -238,7 +238,8 @@
       display: flex;
       align-items: flex-end;
       justify-content: flex-end;
-      pointer-events: none;
+      pointer-events: auto;
+      text-decoration: none;
     }
 
     .pitlane-card {
@@ -314,7 +315,7 @@
       height: 1.5rem;
       object-fit: contain;
       display: block;
-      filter: grayscale(1) contrast(1.15);
+      filter: contrast(1.15);
     }
 
     .pitlane-trigger:hover {
@@ -1251,23 +1252,19 @@
     </main>
   </div>
 
-  <div class="pitlane-easter" aria-label="Пасхалка GANG">
+  <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="pitlane-easter" aria-label="Пасхалка GANG">
     <div class="pitlane-card">
       <div class="pitlane-thumb">
         <div class="hero-art w-full rounded-[20px] p-3">
           <img src="map.webp" alt="GANG map easter egg" class="map-color">
         </div>
       </div>
-      <div class="easter-card-note">
-        <strong>GANG MODE</strong>
-        <span>Hidden drop unlocked</span>
-      </div>
     </div>
-    <a href="https://app.lava.top/products/b37c3485-0cd2-459f-a069-209f7940ba15" class="pitlane-trigger">
-      <img src="аk74.png" alt="" class="pitlane-trigger-icon" aria-hidden="true">
-      <span>Gang only</span>
-    </a>
-  </div>
+    <div class="pitlane-trigger">
+      <img src="map.webp" alt="" class="pitlane-trigger-icon" aria-hidden="true">
+      <span>MAP</span>
+    </div>
+  </a>
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
